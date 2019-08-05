@@ -1,0 +1,44 @@
+esphome:
+  name: esp32
+  platform: ESP32
+  board: esp-wrover-kit
+
+wifi:
+  ssid: "test"
+  password: "test"
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+
+esp32_ble_client:
+
+sensor:
+  - platform: xiaomi_ble_lywsd02
+    update_interval: 180s
+    mac_address: XX:XX:XX:XX:XX:XX
+    temperature:
+      name: "lywsd02 Temperature"
+    humidity:
+      name: "lywsd02 Humidity"
+  - platform: meizu_ble
+    update_interval: 180s
+    mac_address: XX:XX:XX:XX:XX:XX
+    temperature:
+      name: "Meizu Temperature"
+    humidity:
+      name: "Meizu Humidity"
+    battery_level:
+      name: "Meizu Battery"
+  - platform: xiaomi_ble_mjhtv1
+    update_interval: 180s
+    mac_address: XX:XX:XX:XX:XX:XX
+    temperature:
+      name: "mjhtv1 Temperature"
+    humidity:
+      name: "mjhtv1 Humidity"
+
