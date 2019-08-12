@@ -5,6 +5,7 @@ import btsnoop.bt.hci_uart as hci_uart
 import btsnoop.bt.hci_acl as hci_acl
 import btsnoop.bt.l2cap as l2cap
 import btsnoop.bt.att as att
+import argparse
 
 def get_ir_infos(records):
     ir_infos = {}
@@ -56,11 +57,26 @@ def get_ir_infos(records):
     for k in sorted_keys:
         ir_info = ir_infos[k]
         print(ir_info['id'] + ':' + ''.join(ir_info['data']))
+        print(' ')
 
 if __name__ == "__main__":
-    phone = SnoopPhone()
-    home = os.path.expanduser("~")
-    dst = os.path.join(home, 'mysnoop.log')
-    filename = phone.pull_btsnoop(dst)
+    parser = argparse.ArgumentParser(
+        description=(
+            "Extract IR data from android phone or btsnoop_hci.log file"))
+    parser.add_argument("-f", type=str, dest='file', default=None, help="log file path, if not specified, pull it from phone with adb.")
+    args = parser.parse_args()
+    
+    filename = ''
+    if args.file != None:
+        filename = os.path.expanduser(args.file)
+        if not os.path.isfile(filename):
+            print("Invalid log file path specified!")
+            sys.exit(-1)
+    else:
+        phone = SnoopPhone()
+        home = os.path.expanduser("~")
+        dst = os.path.join(home, 'mysnoop.log')
+        filename = phone.pull_btsnoop(dst)
+    
     records = btsnoop.parse(filename)
     get_ir_infos(records)
